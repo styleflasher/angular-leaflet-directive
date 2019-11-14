@@ -1599,6 +1599,7 @@ angular.module("leaflet-directive").factory('leafletMapDefaults', ["$q", "leafle
             dragging: true,
             worldCopyJump: false,
             doubleClickZoom: true,
+            trackResize: true,
             scrollWheelZoom: true,
             tap: true,
             touchZoom: true,
@@ -1653,6 +1654,7 @@ angular.module("leaflet-directive").factory('leafletMapDefaults', ["$q", "leafle
                 dragging: d.dragging,
                 zoomControl: d.zoomControl,
                 doubleClickZoom: d.doubleClickZoom,
+                trackResize: d.trackResize,
                 scrollWheelZoom: d.scrollWheelZoom,
                 tap: d.tap,
                 touchZoom: d.touchZoom,
@@ -1747,10 +1749,15 @@ angular.module("leaflet-directive").factory('leafletMapDefaults', ["$q", "leafle
                 if (isDefined(userDefaults.map)) {
                     newDefaults.map = userDefaults.map;
                 }
-                
+
                 if (isDefined(userDefaults.path)) {
                     newDefaults.path = userDefaults.path;
                 }
+                if (isDefined(userDefaults.trackResize)) {
+                    newDefaults.trackResize = userDefaults.trackResize;
+                }
+
+
             }
 
             var mapId = obtainEffectiveMapId(defaults, scopeId);
@@ -2766,7 +2773,7 @@ angular.module("leaflet-directive").directive('center',
                     safeApply(leafletScope, function(scope) {
                         if (!leafletScope.settingCenterFromScope) {
                             //$log.debug("updating center model...", map.getCenter(), map.getZoom());
-                            
+
                             angular.extend(scope.center,{
                                lat: map.getCenter().lat,
                                lng: map.getCenter().lng,
@@ -3556,7 +3563,7 @@ angular.module("leaflet-directive").directive('legend', ["$log", "$http", "leafl
                         position = newLegend.position || 'bottomright';
 
                         // default to arcgis
-                        type = newLegend.type || 'arcgis'; 
+                        type = newLegend.type || 'arcgis';
                     }
 
                 }, true);
@@ -3865,7 +3872,7 @@ angular.module("leaflet-directive").directive('maxbounds', ["$log", "leafletMapD
                         map.setMaxBounds();
                         return;
                     }
-                    
+
                     var leafletBounds = leafletBoundsHelpers.createLeafletBounds(maxbounds);
                     if(isNumber(maxbounds.pad)) {
                       leafletBounds = leafletBounds.pad(maxbounds.pad);
